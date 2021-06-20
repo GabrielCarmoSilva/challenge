@@ -8,24 +8,21 @@ services:
       - .:/var/www/app:delegated
     ports:
       - 8000:8080
-    depends_on:
-      - postgres
     environment:
       - PHP_MEMORY_LIMIT=-1
       - COMPOSER_MEMORY_LIMIT=-1
-  postgres:
-    image: postgres:12-alpine
-    container_name: idez-postgres
-    restart: always
+  db:
+    image: mysql:5.7
+    container_name: idez-data
+    restart: unless-stopped
     tty: true
-    environment:
-      - POSTGRES_DB=idez
-      - POSTGRES_USER=idez
-      - POSTGRES_PASSWORD=idez
     ports:
-      - 5432:5432
-    volumes:
-      - idez-data:/var/lib/postgresql/data:delegated
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: Jesusofsuburbia1@
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
 volumes:
   idez-data:
     driver: local

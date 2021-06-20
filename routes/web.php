@@ -16,3 +16,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/usuarios', 'UserController@index'); //Visualizar todos os usuários
+Route::post('/usuarios', 'UserController@store'); //Criar usuário
+Route::patch('/usuarios/{user}', 'UserController@update'); //Editar usuário
+Route::get('/usuarios/{user}', 'UserController@show'); //Visualizar informações de um usuário
+Route::delete('/usuarios/{user}', 'UserController@destroy'); //Deletar usuário
+
+Route::get('/contas', 'AccountController@index'); //Visualizar todas as contas pessoais
+Route::post('/contas/pessoal', 'AccountController@storePersonalAccount'); //Criar conta pessoal
+Route::patch('/contas/pessoal/{account}', 'AccountController@updatePersonalAccount'); //Editar conta pessoal
+Route::patch('/contas/empresarial/{account}', 'AccountController@updateCompanyAccount'); //Editar conta empresarial 
+Route::post('/contas/empresarial', 'AccountController@storeCompanyAccount'); //Criar conta empresarial
+Route::get('/contas/{account}', 'AccountController@show'); //Visualizar informações de uma conta pessoal
+Route::delete('/contas/{account}', 'AccountController@destroy'); //Deletar conta pessoal
+
