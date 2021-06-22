@@ -24,6 +24,7 @@ class CreateAccountsTable extends Migration
             $table->string('social_reason')->nullable();
             $table->string('fantasy_name')->nullable();
             $table->string('cnpj')->nullable()->unique();
+            $table->string('balance'); //criei um atributo saldo para fazer controle das transacoes
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

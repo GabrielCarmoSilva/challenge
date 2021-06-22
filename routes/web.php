@@ -31,3 +31,6 @@ Route::post('/contas/empresarial', 'AccountController@storeCompanyAccount'); //C
 Route::get('/contas/{account}', 'AccountController@show'); //Visualizar informações de uma conta pessoal
 Route::delete('/contas/{account}', 'AccountController@destroy'); //Deletar conta pessoal
 
+Route::get('/transacoes', 'TransactionController@index');
+Route::post('/transacoes', 'TransactionController@store');
+Route::get('/transacoes/{transaction}', 'TransactionController@get');

@@ -14,9 +14,13 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return User::all();
+        if($request->has('q')) {
+            $search = $request->input('q');
+            return User::with('accounts')->where('name', 'LIKE', '%' . $search . '%')->orWhere('cpf', 'LIKE', '%' . $search . '%')->get();
+        }
+        return User::with('accounts')->get();
     }
 
     /**
@@ -52,7 +56,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return $user;
+        return User::with('accounts')->find('user');
     }
 
     /**

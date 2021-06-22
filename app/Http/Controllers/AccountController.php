@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Account;
 use App\User;
+use App\Transaction;
 use App\Http\Requests\StorePersonalAccountRequest;
 use App\Http\Requests\UpdatePersonalAccountRequest;
 use App\Http\Requests\StoreCompanyAccountRequest;
@@ -19,7 +20,7 @@ class AccountController extends Controller
      */
     public function index()
     {
-        return Account::all();
+        return Account::with('transactions')->get();
     }
 
     /**
@@ -47,7 +48,8 @@ class AccountController extends Controller
             'type' => 'Pessoal',
             'name' => $request->name,
             'cpf' => $request->cpf,
-            'user_id' => $request->user_id
+            'user_id' => $request->user_id,
+            'balance' => 0, //inicializando saldo como 0
         ]);
 
         return $account;
@@ -64,6 +66,7 @@ class AccountController extends Controller
             'fantasy_name' => $request->fantasy_name,
             'cnpj' => $request->cnpj,
             'user_id' => $request->user_id,
+            'balance' => 0, //inicializando saldo como 0
         ]);
 
         return $account;
@@ -75,9 +78,9 @@ class AccountController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Account $account)
     {
-        //
+        return Account::with('transactions')->find($account);
     }
 
     /**
