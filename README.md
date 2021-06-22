@@ -17,7 +17,7 @@ Cada transação deverá ter um valor, positivo ou negativo, além de um dos cin
 - Compra (Crédito)
 
 ## Instruções
-A tecnologia usada no projeto foi a **mysql**, então o `docker-compose.yml` possui um serviço configurado para tal. Para rodar na sua máquina, basta substituir `{yourpassword}` por sua senha de root do seu banco de dados no arquivo.
+A tecnologia de banco de dados usada no projeto foi a **mysql**, então o `docker-compose.yml` possui um serviço configurado para tal. Para rodar na sua máquina, basta substituir `{yourpassword}` por sua senha de root do seu banco de dados no arquivo.
 
 Copie o arquivo `.env.example` e salve como `.env`.
 
