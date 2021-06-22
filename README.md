@@ -1,73 +1,67 @@
 # Desafio Backend
 
-## Problema
-A idez é uma fintech que busca oferecer tecnologia de ponta para outras empresas do ecosistema financeiro. Um dos passos necessários para completarmos essa missão é implementar a criação de contas para utilização do nosso aplicativo em diferentes plataformas. 
-É importante lembrar que o seu sistema será integrado aos nossos painéis internos e ao aplicativo.
+Este projeto consiste em uma API em Laravel para criação de usuários, contas e transações da idez. 
 
 Todo o processo começa com a criação de um Usuário. Um usuário pode ter mais de um tipo de conta vinculada a ele. 
-De um **Usuário (User)**, queremos saber seu `Nome Completo`, `CPF`, `Número de Telefone`, `e-mail` e `Senha`. 
-CPFs e e-mails devem ser únicos no sistema. Sendo assim, seu sistema deve permitir apenas um cadastro com o mesmo CPF ou endereço de e-mail.
+De um **Usuário (User)**, deve ser digitado seu `Nome Completo`, `CPF`, `Número de Telefone`, `e-mail` e `Senha`. 
 
 Os tipos de conta que existem na idez são **Empresarial (Company)** e **Pessoal (Person)**. Todas as contas sempre estarão vinculadas a um usuário e possuem alguns dados em comum: `Id da Conta`, `Agência`, `Número` e `Dígito`. 
 De uma conta empresarial queremos saber a `Razão Social`, o `Nome Fantasia`, o `CNPJ`, além do `id de Usuário` que será dono dessa conta. 
 De uma conta pessoal, queremos saber apenas seu `Nome` e `CPF`, além do `id de Usuário` que será dono dessa conta. 
 
-Os documentos (cpf e cnpj) devem ser únicos dentro do sistema, mesmo entre contas de tipos diferentes.
-Devido a algumas limitações do sistema, **cada Usuário pode ter apenas uma conta de cada tipo**.
-
-Seu sistema deve ser capaz de listar todos os usuários, além de conseguir trazer informações detalhadas de um usuário específico. 
-Durante a listagem, deve ser possível filtar os resultados por `Nome` ou `Documento`.
-Para fins didáticos, sua busca deve considerar apenas resultados que comecem com a string especificada na busca. Como exemplo,
-`GET /users?q=joao` deve retornar apenas Usuários cujos Nomes comecem com a string **joao**. 
-Não há a necessidade de lidar com acentos.
-
-Outra funcionalidade do sistema deve ser a possiblidade de contas poderem realizar **Transações (Transactions)**. Cada transação deverá ter um valor, positivo ou negativo, além de um dos cinco `Tipos` de operação que fazemos: 
+Cada transação deverá ter um valor, positivo ou negativo, além de um dos cinco `Tipos` de operação que fazemos: 
 - Pagamento de Conta
 - Depósito
 - Transferência
 - Recarga de Celular
 - Compra (Crédito)
 
-O sistema precisará listar todas as informações de uma conta, incluindo as suas transações e usuários relacionados em um único endpoint: `/accounts/{id}`.
-
-Sua tarefa é desenvolver uma API capaz de cumprir com todos os requisitos especificados. 
-
-
 ## Instruções
-Para ajudar no desenvolvimento e evitar perda de tempo com código *boilerplate*, decidimos prover uma estrutura básica para o desenvolvimento da sua solução utilizando a plataforma PHP (Laravel 7.* + Postgres).
-A estrutura **deve** ser utilizada no desenvolvimento da sua solução. 
+A tecnologia usada no projeto foi a **mysql**, então o `docker-compose.yml` possui um serviço configurado para tal. Para rodar na sua máquina, basta substituir `{yourpassword}` por sua senha de root do seu banco de dados no arquivo.
 
-Você poderá fazer um fork nesse repositório e trabalhar a partir daí.
+Copie o arquivo `.env.example` e salve como `.env`.
 
-O primeiro passo para o início do desenvolvimento é escolher qual tecnologia de banco de dados será utilizada no seu projeto. Dependendo da escolha, existem algumas alterações que devem ser feitas no seu projeto base.
+Rode os comandos `docker-compose up --build`, `docker-compose up -d`, `docker-compose run web composer install` e `docker-compose run web php artisan key:generate` para iniciar o projeto.
 
-- Copie o arquivo `.env.example` e salve como `.env`.
+## Rotas
+Para testar a API, usei o cliente REST Insomnia. É importante que as rotas **POST** e **PATCH** tenham como corpo da requisição **Form URL Encoded** e como cabeçalho **accept: application/json**, devido à validação da request do Laravel. As rotas da aplicação são:
 
-Para verificar se a sua solução está funcionando, utilize o comando `docker-compose up --build` a partir do diretório raiz do projeto. 
-A sua API estará mapeada para a porta `8000`do seu host local. Uma requisição `GET localhost:8000/` vai retornar a versão do Laravel em execução.
+### Usuários
+`/usuarios`, como rota GET, para listar todos os usuários cadastrados. É possível filtrar por nome ou documento, como por exemplo: `/usuarios?q=Joao`
 
-**IMPORTANTE:** após a execução do `docker-compose up -d`, na pasta do projeto, execute o comando `docker-compose run web composer install` e em seguida `docker-compose run web php artisan key:generate`.
-Quando o volume atual é mapeado para dentro do container, ele sobrescreve a pasta com as dependências instaladas pelo composer, por isso o comando é necessário. 
+`/usuarios`, como rota POST, para cadastrar um usuário. As informações como `name`, `cpf`, `password`, `email`, `phone` devem ser providas no corpo da requisição.
 
-## Avaliação
-A avaliação da sua solução será constituída de duas etapas principais: **Correção objetiva** e **Correção qualitativa**. 
+`/usuarios/{id}`, como rota PATCH, para editar um usuário. O id dele deve ser informado na rota.
 
-Caso você não se sinta à vontade com a arquitetura proposta, você pode apresentar sua solução utilizando frameworks diferentes. 
-Porém, nesse caso, uma entrevista de **Code Review** será necessária para a avaliação da sua solução.
+`/usuarios/{id}`, como rota DELETE, para deletar um usuário.
 
-A correção objetiva será realizada através da utilização de um script de correção automatizada. A correção qualitativa levará em conta os seguintes critérios:
+`/usuarios/{id}`, como rota GET, para mostrar todas as informaçṍes de um determinado usuário.
 
-* Modelagem de Dados
-* Domínio da Linguagem
-* Legibilidade do Código
-* Estrutura do Código
-* Organização do Código
-* Design Patterns
-* Manutenibilidade do Código
-* Diferenciais: Testes Unitários e Cobertura de Testes
+A API não permite que dois usuários com o mesmo cpf e email sejam cadastrados.
 
-## Como submeter
-Ao finalizar envie uma chamada para o nosso slack (a url está no e-mail. Se não a tiver, pergunte ao seu(sua) recrutador(a)) com seu Nome, email e link para o repositório com a solução do desafio. 
-Caso já esteja em processo de avaliação, é interessante também informar o(a) seu(sua) recrutador(a) sobre a conclusão desta etapa.
+### Contas
+`/contas`, como rota GET, para listar todos os usuários cadastrados.
 
-**Lembre-se de não enviar arquivos compilados e configurações de IDE ao submeter a sua solução.** 
+`/contas/pessoal`, como rota POST, para cadastrar uma conta pessoal. As informações como `name`, `cpf` e `user_id` devem ser providas na requisição.
+
+`/contas/empresarial`, como rota POST, para cadastrar uma conta empresarial. As informações como `social_reason`, `fantasy_name`, `cnpj` e `user_id` devem ser providas na requisição.
+
+`/contas/pessoal/{id}`, como rota PATCH, para editar uma conta pessoal. Caso seja informado o id de uma conta empresarial, aparecerá uma mensagem de erro. Mesma coisa para o inverso.
+
+`/contas/empresarial/{id}`, como rota PATCH, para editar uma conta empresarial.
+
+`/contas/{id}`, como rota GET, para visualizar todas as informações de uma conta.
+
+`/contas/{id}`, como rota DELETE, para deletar uma conta.
+
+A API não permite que um usuário tenha mais de uma conta de cada tipo.
+
+### Transações
+
+`/transacoes`, como rota GET, para listar todas as transações do sistema.
+
+`/transacoes`, como rota POST, para fazer uma transação. As informações como `type`, `value` e `account_id` devem ser providas na requisição. Se o tipo informado for diferente dos tipos já citados acima, o sistema retornará uma mensagem de erro. Além disso, os tipos *Pagamento de Conta*, *Recarga de Celular* e *Compra (Crédito)*, o sistema sempre entenderá o valor como negativo, e descontará esse valor do saldo da conta correspondente. Os outros tipos de transação, ele descontará ou somará de acordo com o sinal do valor.
+
+### Testes
+
+Para testar o banco de dados, criei factories e seeders. Rode o comando `docker-compose run web php artisan migrate:fresh --seed` para migrar o banco de dados com os dados auto-generados.
